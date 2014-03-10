@@ -1,3 +1,9 @@
+footer {
+    text-align: center;
+    font-family: courier;
+    font-size: 13px;
+}
+
 .container {
     margin: 0 auto;
     width: 100%;
@@ -16,21 +22,27 @@
 }
 
 .batallon_att {
-margin-left: 100px;
-margin-right: 100px;
-height: 100px;
-border-radius: 100px;
-background: rgb(255, 153, 153);
-border: 2px solid rgb(104, 0, 0);
+    margin-left: 100px;
+    margin-right: 100px;
+    height: 100px;
+    border-radius: 100px;
+    background: rgb(255, 153, 153);
+    border: 2px solid rgb(104, 0, 0);
+    width: 100px;
+    position: absolute;
+    left: 290px;
 }
 
 .batallon_def {
-margin-left: 100px;
-margin-right: 100px;
-height: 100px;
-border-radius: 100px;
-background: rgb(142, 255, 142);
-border: 2px solid rgb(0, 71, 0);
+    margin-left: 100px;
+    margin-right: 100px;
+    height: 100px;
+    border-radius: 100px;
+    background: rgb(142, 255, 142);
+    border: 2px solid rgb(0, 71, 0);
+    width: 100px;
+    position: absolute;
+    right: 290px;
 }
 
 .ataque {
@@ -52,10 +64,33 @@ border: 2px solid rgb(0, 71, 0);
     border-radius: 1000px;
 }
 
+.input {
+}
+
+.button {
+    background: url(../img/attack.png);
+    width: 100%;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100px;
+}
+.attack {
+    font-family: Lobster;
+    padding-top: 42px;
+    color: rgb(190, 0, 0);
+}
+
 .title {
     font-family: Lobster;
     font-size: 25px;
     color: white;
+}
+
+.title_input {
+    font-family: Lobster;
+    font-size: 20px;
+    color: black
 }
 .troops {
     font-size: 19px;

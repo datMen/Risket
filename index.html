@@ -1,12 +1,10 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Droppable</title>
+    <title>RISKETEEEEE</title>
     <script src="js/jquery-1.9.1.min.js"></script>
     <script src="js/jquery-ui-1.10.4.custom.js"></script>
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/risket.js"></script>
-    <link href='http://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -16,24 +14,30 @@
                 <div class="batallon_content">
                     <h3 class="title">Atacante</h3>
                     <div class="batallon_att">
-                        <p class="troops" style="color: rgb(226, 0, 0);">10</p>
+                        <p class="troops" style="color: rgb(226, 0, 0);">0</p>
                     </div>
                 </div>
             </div>
+            <h3 class="title_input" style="color: rgb(104, 0, 0)">Tropas de atacachione:</h3>
+            <input class="input" id="atacante" type="text" />
         </div>
         <div class="batallon">
             <div class="defensa">
                 <div class="batallon_content">
                     <h3 class="title">Defensor</h3>
                     <div class="batallon_def">
-                        <p class="troops" style="color: green">10</p>
+                        <p class="troops" style="color: green">0</p>
                     </div>
                 </div>
             </div>
+            <h3 class="title_input" style="color: rgb(0, 71, 0)">Tropas de defendichione:</h3>
+            <input class="input" id="defensor" type="text" />
         </div>
         <div class="enfrentar">
-            <input type="button" onclick="getWar()" value="ATTACK" />
+            <a onclick="getWar()"><div class="button"><p class="attack">ATTACK</p></div></a>
+            <script src="js/risket.js"></script>
         </div>
+        <footer>© Mencey Melgar | 2014</footer>
     </div>
 </body>
 </html>
