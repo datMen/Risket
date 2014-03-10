@@ -11,9 +11,63 @@
     text-align: center;
 }
 
-.ataque {
+.batallon_content {
+    margin: 75px auto;
+}
 
+.batallon_att {
+margin-left: 100px;
+margin-right: 100px;
+height: 100px;
+border-radius: 100px;
+background: rgb(255, 153, 153);
+border: 2px solid rgb(104, 0, 0);
+}
+
+.batallon_def {
+margin-left: 100px;
+margin-right: 100px;
+height: 100px;
+border-radius: 100px;
+background: rgb(142, 255, 142);
+border: 2px solid rgb(0, 71, 0);
+}
+
+.ataque {
+    margin: 40px;
+    float: right;
+    width: 300px;
+    height: 300px;
+    background: rgb(194, 0, 0);;
+    border: 5px solid rgb(104, 0, 0);
+    border-radius: 1000px;
 }
 .defensa {
-    
+    margin: 40px;
+    float: left;
+    width: 300px;
+    height: 300px;
+    background: green;
+    border: 5px solid rgb(0, 71, 0);
+    border-radius: 1000px;
+}
+
+.title {
+    font-family: Lobster;
+    font-size: 25px;
+    color: white;
+}
+.troops {
+    font-size: 19px;
+    font-family: courier;
+    padding-top: 20px;
+}
+
+.enfrentar {
+    bottom: 0;
+width: 100%;
+float: left;
+margin: 0 auto;
+text-align: center;
+margin-bottom: 50px;
 }

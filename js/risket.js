@@ -1,47 +1,42 @@
-var dado = Math.floor(Math.random()*6+1);
-var atacante = 0;
-var defensor = 0;
 function getWar() {
-    console.log("Introduce el numero de atacantes: ");
-    atacante = readline();
-    console.log("Introduce el numero de defensores: ");
-    defensor = readline();
+    atacante = $( ".batallon_att .troops" ).html();
+    defensor = $( ".batallon_def .troops" ).html();
     if (defensor > 1 && atacante > 3) {
         while (atacante > 3 && defensor > 1) {
-            att = [dado, dado, dado];
-            defensa = [dado, dado];
+            att = [Math.floor(Math.random()*6+1), Math.floor(Math.random()*6+1), Math.floor(Math.random()*6+1)];
+            defensa = [Math.floor(Math.random()*6+1), Math.floor(Math.random()*6+1)];
             faceWar(att, defensa);
-            console.log("Atacante: " + atacante);
-            console.log("Defensor: " + defensor);
+            $( ".draggable" ).filter("#"+id).animate({
         }
     }
     if (defensor > 0 && atacante > 3) {
         while (atacante > 3 && defensor > 1) {
-            att = [dado, dado, dado];
-            defensa = [dado];
+            att = [Math.floor(Math.random()*6+1), Math.floor(Math.random()*6+1), Math.floor(Math.random()*6+1)];
+            defensa = [Math.floor(Math.random()*6+1)];
             faceWar(att, defensa);
-            console.log("Atacante: " + atacante);
-            console.log("Defensor: " + defensor);
+            console.log("Atacante: " + att);
+            console.log("Defensor: " + defensa);
         }
     }
     if (defensor > 0 && atacante > 2) {
         while (atacante > 2 &&  defensor > 0) {
-            att = [dado, dado];
-            defensa = [dado];
+            att = [Math.floor(Math.random()*6+1), Math.floor(Math.random()*6+1)];
+            defensa = [Math.floor(Math.random()*6+1)];
             faceSingleWar(att, defensa);
-            console.log("Atacante: " + atacante);
-            console.log("Defensor: " + defensor);
+            console.log("Atacante: " + att);
+            console.log("Defensor: " + defensa);
         }
     }
     if (defensor > 0 && atacante == 2) {
         while (atacante > 1 &&  defensor > 0) {
-            att = [dado];
-            defensa = [dado];
+            att = [Math.floor(Math.random()*6+1)];
+            defensa = [Math.floor(Math.random()*6+1)];
             faceSingleWar(att, defensa);
-            console.log("Atacante: " + atacante);
-            console.log("Defensor: " + defensor);
+            console.log("Atacante: " + att);
+            console.log("Defensor: " + defensa);
         }
     }
+    finishWar(atacante, defensor);
 }
 function faceWar(ataque, defensa) {
     max_att = Math.max.apply( Math, ataque );
@@ -73,4 +68,9 @@ function faceSingleWar(ataque, defensa) {
     else {
         console.log("error");
     }
+}
+
+function finishWar(atacante, defensor) {
+    $( ".batallon_att .troops" ).html(atacante);
+    $( ".batallon_def .troops" ).html(defensor);
 }
