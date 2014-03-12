@@ -4,14 +4,14 @@ function getWar() {
         $( ".batallon_att" ).finish();
         $( ".batallon_def" ).finish();
         $( ".batallon_att" ).animate({
-            left: 290
+            left: 0
         }, 50);
         $( ".batallon_def" ).animate({
-            right: 290
+            right: 0
         }, 50);
     }
-    atacante = $( ".batallon_att .troops" ).html();
-    defensor = $( ".batallon_def .troops" ).html();
+    atacante = parseInt($( ".batallon_att .troops" ).html());
+    defensor = parseInt($( ".batallon_def .troops" ).html());
     first = true;
     if (defensor > 1 && atacante > 3) {
         att = [Math.floor(Math.random()*6+1), Math.floor(Math.random()*6+1), Math.floor(Math.random()*6+1)];
@@ -159,16 +159,14 @@ function faceDoubleWarDef(ataque, defensa) {
 
 function setWar(atacante, defensor) {
     $( ".batallon_att" ).animate({
-        left: 435,
-        borderTopRightRadius: 10,
-        borderBottomRightRadius: 10
+        left: 140,
+        borderBottomLeftRadius: 10
     }, 50, function() {
         $( ".batallon_att .troops" ).text(atacante).fadeIn();
     });
     $( ".batallon_def" ).animate({
-        right: 435,
-        borderTopLeftRadius: 10,
-        borderBottomLeftRadius: 10
+        right: 140,
+        borderTopRightRadius: 10
     }, 50, function() {
         $( ".batallon_def .troops" ).text(defensor).fadeIn();
     });
@@ -176,22 +174,54 @@ function setWar(atacante, defensor) {
 
 function finishWar(atacante, defensor) {
     $( ".batallon_att" ).animate({
-        left: 290,
-        borderTopRightRadius: 100,
-        borderBottomRightRadius: 100
-    }, 500);
-    $( ".batallon_def" ).animate({
-        right: 290,
-        borderTopLeftRadius: 100,
+        left: 0,
         borderBottomLeftRadius: 100
     }, 500);
+    $( ".batallon_def" ).animate({
+        right: 0,
+        borderTopRightRadius: 100
+    }, 500, function() {
+        if (defensor == 0 && atacante > 1) {
+            $( ".batallon_def" ).finish();
+            $( ".batallon_def .troops" ).animate({
+            'color': 'gray'
+            },500);
+            $( ".batallon_def" ).animate({
+            'backgroundColor': 'rgb(213, 213, 213)',
+            'border-color': 'rgb(122, 122, 122)'
+            },500);
+            $( ".defensa" ).animate({
+                'backgroundColor': 'rgb(173, 173, 173)',
+                'border-color': 'rgb(122, 122, 122)'
+            },500);
+    }
+    });
 }
 
 $(function() {
     $("#defensor").keyup(function() {
         $( ".batallon_def .troops" ).text($( this ).val());
+        if (first) {
+            $( ".batallon_def" ).finish();
+            $( ".batallon_def .troops" ).animate({
+            'color': 'green'
+            },500);
+            $( ".batallon_def" ).animate({
+            'backgroundColor': 'rgb(142, 255, 142)',
+            'border-color': 'rgb(0, 71, 0)'
+            },500);
+            $( ".defensa" ).animate({
+                'backgroundColor': 'green',
+                'border-color': 'rgb(0, 71, 0)'
+            },500);
+        }
     });
     $("#atacante").keyup(function() {
         $( ".batallon_att .troops" ).text($( this ).val());
     });
+    $(".input").keypress(function(e) {
+    if(e.which == 13) {
+        getWar();
+    }
+});
 });

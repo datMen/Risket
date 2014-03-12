@@ -4,7 +4,10 @@
     <title>RISKETEEEEE</title>
     <script src="js/jquery-1.9.1.min.js"></script>
     <script src="js/jquery-ui-1.10.4.custom.js"></script>
+    <script src="js/raphael-min.js"></script>
+    <script src="js/kartograph.js-master/kartograph.js"></script>
     <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=1270px" >
     <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -18,8 +21,6 @@
                     </div>
                 </div>
             </div>
-            <h3 class="title_input" style="color: rgb(104, 0, 0)">Tropas de atacachione:</h3>
-            <input class="input" id="atacante" type="text" />
         </div>
         <div class="batallon">
             <div class="defensa">
@@ -30,12 +31,20 @@
                     </div>
                 </div>
             </div>
-            <h3 class="title_input" style="color: rgb(0, 71, 0)">Tropas de defendichione:</h3>
-            <input class="input" id="defensor" type="text" />
         </div>
         <div class="enfrentar">
-            <a onclick="getWar()"><div class="button"><p class="attack">ATTACK</p></div></a>
-            <script src="js/risket.js"></script>
+            <div class="troops_input">
+                <h3 class="title_input" style="color: rgb(104, 0, 0)">Tropas de atacachione:</h3>
+                <input class="input" id="atacante" type="text" />
+            </div>
+            <div class="troops_input" style="width: 200px;">
+                <a href="#" onclick="getWar()"><div class="button"><p class="attack">ATTACK</p></div></a>
+                <script src="js/risket.js"></script>
+            </div>
+            <div class="troops_input">
+                <h3 class="title_input" style="color: rgb(0, 71, 0)">Tropas de defendichione:</h3>
+                <input class="input" id="defensor" type="text" />
+            </div>
         </div>
         <footer>© Mencey Melgar | 2014</footer>
     </div>
