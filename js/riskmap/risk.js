@@ -9,6 +9,8 @@ var Risk = {
         dcolors: {yellow: '#ff0', black: 'black', green: '#004e00', blue: '#00004f', red: 'rgb(104, 0, 0)', purple: 'purple', cyan: '#00ffe4'},
         independentTerritories: 3,
         players: ['black', 'green', 'blue', 'red'],
+        playersid: [],
+        turnOf: 0,
         playerTroops: {},
         listTroops: {3: 35, 4: 30, 5: 25, 6: 20},
         adding: true,
@@ -207,6 +209,7 @@ var Risk = {
             defaultTroops = Risk.Settings.listTroops[Risk.Settings.players.length];
             for(var i in Risk.Settings.players) {
                 Risk.Settings.playerTroops[Risk.Settings.colors[Risk.Settings.players[i]]] = defaultTroops;
+                Risk.Settings.playersid.push(Risk.Settings.colors[Risk.Settings.players[i]]);
             }
             for(var id in Risk.Territories) {
                 var playerTroops = Risk.Settings.playerTroops[Risk.Territories[id].color];
@@ -215,6 +218,13 @@ var Risk = {
                 Risk.Territories[id].armyNum.attrs.text = 0;
                 $(".kineticjs-content").append("<div id='"+Risk.Territories[id].path.attrs.id+"' class='troops_main' style='left: "+ArmyjqPoints[id].x+"; top: "+ArmyjqPoints[id].y+"'><div id='"+Risk.Territories[id].path.attrs.id+"' class='troops' style='background:"+Risk.Territories[id].color+"'></div><a href='#' id='"+Risk.Territories[id].path.attrs.id+"'>"+Risk.Territories[id].armyNum.attrs.text+"</a></div>");
             }
+            showsStartmessage();
+                
+        }
+        function showsStartmessage() {
+            if (Risk.Settings.turnOf === 0) {
+                alertWindow(" turn <span style='color:green'>started<span>",  "url(img/arrow_right_gray.png");
+        }
                 
         }
     },
@@ -271,13 +281,44 @@ var Risk = {
             event.preventDefault();
             var adding = Risk.Settings.adding;
             if (adding) {
-                Risk.divideTroops(t, parseInt(""+Risk.Territories[t].armyNum.attrs.text, 10)+1);
-                Risk.Settings.playerTroops[Risk.Territories[t].color] -= 1;
-                console.log(Risk.Settings.playerTroops);
-                if (Risk.Settings.playerTroops[Risk.Territories[t].color] === 0) {
+                var currentColor = Risk.Settings.playersid[Risk.Settings.turnOf];
+                var currentPlayer = Risk.Settings.players[Risk.Settings.turnOf]
+                var currentPlayerName = currentPlayer.charAt(0).toUpperCase()+currentPlayer.slice(1);
+                if (Risk.Territories[t].color == currentColor) {
+                    Risk.divideTroops(t, parseInt(""+Risk.Territories[t].armyNum.attrs.text, 10)+1);
+                    Risk.Settings.playerTroops[Risk.Territories[t].color] -= 1;
+                    if (Risk.Settings.playerTroops[Risk.Territories[t].color] === 0) {
+                        alertWindow(", your turn is over, press <img class='icon' src='img/arrow_right_green.png'/> to continue", "url(img/arrow_right_green.png)");
+                        Risk.Settings.turnOf += 1;
+                    }
+                }
+                if (Risk.Settings.turnOf == Risk.Settings.players.length) {
                     Risk.Settings.adding = false;
                 }
             }
         });
-    }
+    },
 }
+$(function() {
+    $(".next_action").click(function() {
+        if ($(".next_action").css("background").match("_green")[0] == "_green") {
+            alertWindow(" turn <span style='color:green'>started<span>");
+            setTimeout(function(){ $( ".alert_window" ).fadeOut( "slow" , function() {}); }, 3000);
+        }
+    });
+});
+
+function alertWindow(message, background) {
+    $( ".alert_window" ).stop();
+    var currentColor = Risk.Settings.playersid[Risk.Settings.turnOf];
+    var currentPlayer = Risk.Settings.players[Risk.Settings.turnOf];
+    var currentPlayerName = currentPlayer.charAt(0).toUpperCase()+currentPlayer.slice(1);
+    $(".alert_window p").html("<span class='player' style='color: "+currentColor+"'>"+currentPlayerName+"</span> " + message);
+    $( ".alert_window" ).fadeIn( "slow" , 0, function() {});
+    $(".next_action").css("background", background);
+    setTimeout(function(){ $( ".alert_window" ).fadeOut( "slow" , function() {}); }, 3000);
+}
+
+$( document ).ready(function() {
+    $(".alert_window").hide();
+});

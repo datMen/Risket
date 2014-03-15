@@ -12,6 +12,44 @@ a {
     line-height: 25px;
 }
 
+.next_action {
+    background: url(../../img/arrow_right_gray.png);
+    width: 25px;
+    height: 25px;
+    background-size: auto 100% !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+}
+
+.player {
+    font-weight: bold;
+}
+
+.control_panel {
+    position: absolute;
+    top: 10;
+    left: 10;
+    padding: 4;
+    background: white;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.alert_window {
+    position: fixed;
+    top: 10;
+    right: 10;
+    padding: 20;
+    background: rgba(184, 184, 184, 0.75);
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+}
+
 a:hover {
     color: white;
 }
