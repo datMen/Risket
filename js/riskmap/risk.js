@@ -181,20 +181,6 @@ var Risk = {
 
         Risk.mapLayer.draw();
 
-        function addTroops() {
-            defaultTroops = Risk.Settings.listTroops[Risk.Settings.players.length];
-            for(var i in Risk.Settings.players) {
-                Object.defineProperty(Risk.Settings.playerTroops, Risk.Settings.colors[Risk.Settings.players[i]], {value: defaultTroops});
-            }
-            for(var id in Risk.Territories) {
-                var playerTroops = Risk.Settings.playerTroops[Risk.Territories[id].color];
-                var randomTroops = Math.floor(Math.random()*(playerTroops/2));
-                Risk.Settings.playerTroops[Risk.Territories[id].color] -= randomTroops;
-                Risk.divideTroops(id, 0, false); // USING 0 UNTIL BETTER RANDOMTROOPS
-            }
-                
-        }
-
         function fillRandomColors() {
             for(var id in Risk.Territories) {
                 var randcol = getRandomColor();
@@ -216,118 +202,82 @@ var Risk = {
             var randomNum = Math.floor(Math.random()*(colors.length));
             return colors[randomNum];
         }
-    },
 
-    divideTroops: function(id, troops, status) {
-        checkRemove(id, status);
-
-        var territoryArmy = new Kinetic.Text({
-            text: troops,
-            fill: '#fff',
-            fontSize: 15,
-            fontStyle: 'bold',
-            fontFamily: 'Arial',
-            x: ArmyPoints[id].x,
-            y: ArmyPoints[id].y,
-            align: 'center',
-            id: Risk.Territories[id].color,
-            name: Risk.Territories[id].path.attrs.id
-        });
-        var armyNum = Risk.Territories[id].armyNum;
-        armyNum = territoryArmy;
-        Risk.Territories[id].armyNum.attrs.text = territoryArmy.attrs.text;
-        Risk.troopsLayer.add(armyNum);
-        Risk.troopsLayer.draw();
-
-        function checkRemove(id, remove) {
-            if (remove == 1) {
-                Risk.troopsLayer2.removeChildren();
-                Risk.troopsLayer2.draw();
-                for(var t in Risk.Territories) {
-                    var territoryArmy = new Kinetic.Text({
-                        text: Risk.Territories[t].armyNum.attrs.text,
-                        fill: '#fff',
-                        fontSize: 15,
-                        fontStyle: 'bold',
-                        fontFamily: 'Arial',
-                        x: ArmyPoints[t].x,
-                        y: ArmyPoints[t].y,
-                        align: 'center',
-                        id: Risk.Territories[t].color,
-                        name: Risk.Territories[t].path.attrs.id
-                    });
-                    if (Risk.Territories[t] != Risk.Territories[id]) {
-                        Risk.troopsLayer2.add(territoryArmy);
-                    }
-                }
-                Risk.troopsLayer2.draw();
-                Risk.troopsLayer.removeChildren();
-                Risk.troopsLayer.draw();
+        function addTroops() {
+            defaultTroops = Risk.Settings.listTroops[Risk.Settings.players.length];
+            for(var i in Risk.Settings.players) {
+                Risk.Settings.playerTroops[Risk.Settings.colors[Risk.Settings.players[i]]] = defaultTroops;
             }
-            else if (remove == 2) {
-                Risk.troopsLayer.removeChildren();
-                Risk.troopsLayer.draw();
-                for(var t in Risk.Territories) {
-                    var territoryArmy = new Kinetic.Text({
-                        text: Risk.Territories[t].armyNum.attrs.text,
-                        fill: '#fff',
-                        fontSize: 15,
-                        fontStyle: 'bold',
-                        fontFamily: 'Arial',
-                        x: ArmyPoints[t].x,
-                        y: ArmyPoints[t].y,
-                        align: 'center',
-                        id: Risk.Territories[t].color,
-                        name: Risk.Territories[t].path.attrs.id
-                    });
-                    if (Risk.Territories[t] != Risk.Territories[id]) {
-                        Risk.troopsLayer.add(territoryArmy);
-                    }
-                }
-                Risk.troopsLayer.draw();
-                Risk.troopsLayer2.removeChildren();
-                Risk.troopsLayer2.draw();
+            for(var id in Risk.Territories) {
+                var playerTroops = Risk.Settings.playerTroops[Risk.Territories[id].color];
+                // var randomTroops = Math.floor(Math.random()*(playerTroops/2));
+                // Risk.Settings.playerTroops[Risk.Territories[id].color] -= randomTroops;
+                Risk.Territories[id].armyNum.attrs.text = 0;
+                $(".kineticjs-content").append("<div id='"+Risk.Territories[id].path.attrs.id+"' class='troops_main' style='left: "+ArmyjqPoints[id].x+"; top: "+ArmyjqPoints[id].y+"'><div id='"+Risk.Territories[id].path.attrs.id+"' class='troops' style='background:"+Risk.Territories[id].color+"'></div><a href='#' id='"+Risk.Territories[id].path.attrs.id+"'>"+Risk.Territories[id].armyNum.attrs.text+"</a></div>");
             }
+                
         }
     },
 
+    divideTroops: function(id, troops) {
+        // checkRemove(id, status);
+
+        var territoryArmy = new Kinetic.Text({
+            text: troops
+        });
+        Risk.Territories[id].armyNum.attrs.text = territoryArmy.attrs.text;
+        $(".troops_main a").filter("#"+Risk.Territories[id].path.attrs.id).html(troops);
+    },
+
     actions: function(path, t, group) {
-        group.on('mouseover', function() {
+        group.on('mouseover', function(event) {
+            event.preventDefault();
             path.setOpacity(0.3);
             group.moveTo(Risk.topLayer);
             Risk.topLayer.drawScene();
+            $(".troops_main a").filter("#"+Risk.Territories[t].path.attrs.id).mouseover(function() {
+                $(".troops_main").filter("#"+Risk.Territories[t].path.attrs.id).animate({
+                    width: 35,
+                    height: 35,
+                    left: (ArmyjqPoints[t].x-5),
+                    top: (ArmyjqPoints[t].y-5)
+                }, 100);
+                $(".troops_main a").filter("#"+Risk.Territories[t].path.attrs.id).animate({
+                    "line-height": "35px"
+                }, 100);
+            });
         });
 
-        group.on('mouseout', function() {
+        group.on('mouseout', function(event) {
+            event.preventDefault();
             path.setFill(Risk.Settings.colors[Risk.Territories[t].color]);
             path.setOpacity(0.4);
             group.moveTo(Risk.mapLayer);
             Risk.topLayer.draw();
+            $(".troops_main a").filter("#"+Risk.Territories[t].path.attrs.id).mouseleave(function() {
+                $(".troops_main").filter("#"+Risk.Territories[t].path.attrs.id).animate({
+                    width: 25,
+                    height: 25,
+                    left: (ArmyjqPoints[t].x),
+                    top: (ArmyjqPoints[t].y)
+                }, 100);
+                $(".troops_main a").filter("#"+Risk.Territories[t].path.attrs.id).animate({
+                    "line-height": "25px"
+                }, 100);
+            });
         });
 
-        group.on('click', function() {
-            var status = Risk.Settings.status;
+        group.on('click', function(event) {
+            event.preventDefault();
             var adding = Risk.Settings.adding;
-            if (adding == true) {
-                console.log(parseInt(""+Risk.Territories[t].armyNum.attrs.text, 10));
-                Risk.divideTroops(t, parseInt(""+Risk.Territories[t].armyNum.attrs.text, 10)+1, status);
-                if (Risk.Settings.playerTroops[Risk.Territories[id].color] == 0) {
+            if (adding) {
+                Risk.divideTroops(t, parseInt(""+Risk.Territories[t].armyNum.attrs.text, 10)+1);
+                Risk.Settings.playerTroops[Risk.Territories[t].color] -= 1;
+                console.log(Risk.Settings.playerTroops);
+                if (Risk.Settings.playerTroops[Risk.Territories[t].color] === 0) {
                     Risk.Settings.adding = false;
                 }
-                Risk.Settings.playerTroops[Risk.Territories[id].color] -= 1;
             }
-            else {
-                Risk.divideTroops(t, 1, status);
-            }
-            if (status == 1) {
-                Risk.Settings.status = 2;
-            }
-            else if (status == 2) {
-                Risk.Settings.status = 1;
-            }
-            console.log(path.attrs.id);
-            console.log(Risk.Territories[t].armyNum.attrs.text);
-            location.hash = path.attrs.id;
         });
     }
 }
