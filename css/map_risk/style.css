@@ -1,0 +1,35 @@
+a {
+    display: block;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    font-family: courier;
+    font-size: 13;
+    position: relative;
+    text-decoration: none;
+    color: white;
+    line-height: 25px;
+}
+
+a:hover {
+    color: white;
+}
+
+.troops {
+    position: absolute;
+    width: 93%;
+    height: 93%;
+    border-radius: 100px;
+    border: 1px solid black;
+    opacity: 0.4;
+}
+
+.troops_main {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    text-align: center;
+    color: white;
+    overflow: hidden
+}
