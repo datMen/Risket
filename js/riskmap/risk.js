@@ -11,7 +11,6 @@ var Risk = {
         players: ['black', 'green', 'blue', 'red'],
         playerTroops: {},
         listTroops: {3: 35, 4: 30, 5: 25, 6: 20},
-        status: 1,
         adding: true,
     },
 
@@ -37,8 +36,8 @@ var Risk = {
         //Initiate a Kinetic stage
         Risk.stage = new Kinetic.Stage({
             container: 'map',
-            width: 2500,
-            height: 1700
+            width: 1276,
+            height: 750
         });
 
         Risk.mapLayer = new Kinetic.Layer({
@@ -150,7 +149,6 @@ var Risk = {
         addTroops();
 
         for(var id in Risk.Territories) {
-            console.log(Risk.Territories[id].armyNum.attrs.text);
 
             var color = Risk.Territories[id].color;
             
