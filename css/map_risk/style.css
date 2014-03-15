@@ -39,11 +39,13 @@ a {
     -webkit-margin-after: 0;
     text-align: center;
     font-family: courier;
+    color: white;
 }
 
 .player {
     font-weight: bold;
 }
+
 .control_parent_panel {
     position: fixed;
     top: 10;
@@ -53,7 +55,7 @@ a {
 
 .control_panel {
     padding: 4;
-    background: white;
+    background: rgba(0, 0, 0, 0.14);
     border: 1px solid black;
     border-radius: 10px;
     float: left;
@@ -62,11 +64,33 @@ a {
 
 .alert_window {
     padding: 20;
-    background: white;
+    background: rgba(0, 0, 0, 0.14);
     border: 1px solid black;
     border-radius: 10px;
     float: left;
     margin: 5;
+    color: white;
+    font-family: "Helvetica";
+}
+
+.phase {
+    text-align: center;
+    position: fixed;
+    background: rgba(0, 0, 0, 0.14);
+    color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    top: 0;
+    width: 500px;
+    margin-top: 5;
+    left: 400;
+}
+
+.phase p {
+    font-family: "Lobster";
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    font-size: 17;
 }
 
 .icon {
@@ -78,13 +102,20 @@ a:hover {
     color: white;
 }
 
+.connector {
+    background: white;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+}
+
 .troops {
     position: absolute;
     width: 93%;
     height: 93%;
     border-radius: 100px;
     border: 1px solid black;
-    opacity: 0.4;
+    opacity: 1;
 }
 
 .troops_main {
@@ -93,5 +124,10 @@ a:hover {
     position: absolute;
     text-align: center;
     color: white;
-    overflow: hidden
+    overflow: hidden;
+    z-index: 1;
+}
+
+._jsPlumb_connector  {
+    opacity: 0.8;
 }

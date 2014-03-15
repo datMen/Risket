@@ -13,7 +13,8 @@ var Risk = {
         turnOf: 0,
         playerTroops: {},
         listTroops: {3: 35, 4: 30, 5: 25, 6: 20},
-        adding: true,
+        game_phase: "attack",
+        connect: true,
     },
 
     /**
@@ -177,6 +178,7 @@ var Risk = {
                 Risk.Territories[id].path.setFill(Risk.Settings.colors['indep']);
                 Risk.Territories[id].path.setOpacity(0.5);
                 $(".troops").filter("#"+Risk.Territories[id].path.attrs.id).css("background", Risk.Territories[id].color);
+                $(".troops").filter("#"+Risk.Territories[id].path.attrs.id).css("border-color", "white");
                 $(".troops_main a").filter("#"+Risk.Territories[id].path.attrs.id).css("color", "black");
             }
         }
@@ -216,14 +218,14 @@ var Risk = {
                 // var randomTroops = Math.floor(Math.random()*(playerTroops/2));
                 // Risk.Settings.playerTroops[Risk.Territories[id].color] -= randomTroops;
                 Risk.Territories[id].armyNum.attrs.text = 0;
-                $(".kineticjs-content").append("<div id='"+Risk.Territories[id].path.attrs.id+"' class='troops_main' style='left: "+ArmyjqPoints[id].x+"; top: "+ArmyjqPoints[id].y+"'><div id='"+Risk.Territories[id].path.attrs.id+"' class='troops' style='background:"+Risk.Territories[id].color+"'></div><a href='#' id='"+Risk.Territories[id].path.attrs.id+"'>"+Risk.Territories[id].armyNum.attrs.text+"</a></div>");
+                $(".kineticjs-content").append("<div id='"+Risk.Territories[id].path.attrs.id+"' class='troops_main' style='left: "+ArmyjqPoints[id].x+"; top: "+ArmyjqPoints[id].y+"'><div id='"+Risk.Territories[id].path.attrs.id+"' class='troops' style='background:"+Risk.Territories[id].color+"; border-color: "+Risk.Territories[id].color+"'></div><a href='#' id='"+Risk.Territories[id].path.attrs.id+"'>"+Risk.Territories[id].armyNum.attrs.text+"</a></div>");
             }
             showsStartmessage();
                 
         }
         function showsStartmessage() {
             if (Risk.Settings.turnOf === 0) {
-                alertWindow(" turn <span style='color:green'>started<span>",  "url(img/arrow_right_gray.png");
+                alertWindow(" turn started",  "url(img/arrow_right_gray.png");
                 $( ".soldiers_num" ).html("+"+Risk.Settings.playerTroops[Risk.Settings.colors[Risk.Settings.players[Risk.Settings.turnOf]]]);
                 $( ".soldiers" ).fadeIn( "slow" , 0, function() {});
                 $( ".soldiers_num" ).fadeIn( "slow" , 0, function() {});
@@ -232,7 +234,7 @@ var Risk = {
         }
     },
 
-    divideTroops: function(id, troops) {
+    recruitTroops: function(id, troops) {
         // checkRemove(id, status);
 
         var territoryArmy = new Kinetic.Text({
@@ -252,15 +254,7 @@ var Risk = {
             group.moveTo(Risk.topLayer);
             Risk.topLayer.drawScene();
             $(".troops_main a").filter("#"+Risk.Territories[t].path.attrs.id).mouseover(function() {
-                $(".troops_main").filter("#"+Risk.Territories[t].path.attrs.id).animate({
-                    width: 35,
-                    height: 35,
-                    left: (ArmyjqPoints[t].x-5),
-                    top: (ArmyjqPoints[t].y-5)
-                }, 100);
-                $(".troops_main a").filter("#"+Risk.Territories[t].path.attrs.id).animate({
-                    "line-height": "35px"
-                }, 100);
+                hoverEnemies(t);
             });
         });
 
@@ -271,6 +265,7 @@ var Risk = {
             group.moveTo(Risk.mapLayer);
             Risk.topLayer.draw();
             $(".troops_main a").filter("#"+Risk.Territories[t].path.attrs.id).mouseleave(function() {
+                jsPlumb.detachEveryConnection();
                 $(".troops_main").filter("#"+Risk.Territories[t].path.attrs.id).animate({
                     width: 25,
                     height: 25,
@@ -280,31 +275,17 @@ var Risk = {
                 $(".troops_main a").filter("#"+Risk.Territories[t].path.attrs.id).animate({
                     "line-height": "25px"
                 }, 100);
+                Risk.Settings.connect = true;
             });
         });
 
         group.on('click', function(event) {
             event.preventDefault();
-            var adding = Risk.Settings.adding;
-            if (adding) {
-                var currentColor = Risk.Settings.playersid[Risk.Settings.turnOf];
-                var currentPlayer = Risk.Settings.players[Risk.Settings.turnOf]
-                var currentPlayerName = currentPlayer.charAt(0).toUpperCase()+currentPlayer.slice(1);
-                if (Risk.Territories[t].color == currentColor) {
-                    Risk.divideTroops(t, parseInt(""+Risk.Territories[t].armyNum.attrs.text, 10)+1);
-                    Risk.Settings.playerTroops[Risk.Territories[t].color] -= 1;
-                    if (Risk.Settings.playerTroops[Risk.Territories[t].color] === 0) {
-                        alertWindow(", your turn is over, press <img class='icon' src='img/arrow_right_green.png'/> to continue", "url(img/arrow_right_green.png)");
-                        Risk.Settings.turnOf += 1;
-                    }
-                }
-                if (Risk.Settings.turnOf == Risk.Settings.players.length) {
-                    Risk.Settings.adding = false;
-                }
-            }
+            startTurn(t);
         });
     },
 }
+
 $(function() {
     $(".next_action").click(function() {
         if ($(".next_action").css("background").match("_green")[0] == "_green") {
@@ -313,8 +294,72 @@ $(function() {
     });
 });
 
+function startTurn(t) {
+    var game_phase = Risk.Settings.game_phase;
+    if (game_phase == "recruitment") {
+        var currentColor = Risk.Settings.playersid[Risk.Settings.turnOf];
+        var currentPlayer = Risk.Settings.players[Risk.Settings.turnOf];
+        var currentPlayerName = currentPlayer.charAt(0).toUpperCase()+currentPlayer.slice(1);
+        if (Risk.Territories[t].color == currentColor) {
+            Risk.recruitTroops(t, parseInt(""+Risk.Territories[t].armyNum.attrs.text, 10)+1);
+            Risk.Settings.playerTroops[Risk.Territories[t].color] -= 1;
+            if (Risk.Settings.playerTroops[Risk.Territories[t].color] === 0) {
+                alertWindow(" turn finished, press <img class='icon' src='img/arrow_right_green.png'/> to continue", "url(img/arrow_right_green.png)");
+                Risk.Settings.turnOf += 1;
+            }
+        }
+        if (Risk.Settings.turnOf == Risk.Settings.players.length) {
+            Risk.Settings.game_phase = "attack";
+        }
+    }
+    else if (game_phase == "attack") {
+        
+    }
+}
+
+function hoverEnemies(t) {
+    var game_phase = Risk.Settings.game_phase;
+    if (game_phase == "attack") {
+        var neighbours = Risk.Territories[t].neighbours;
+        var connect = Risk.Settings.connect;
+        if (connect) {
+            if (Risk.Settings.playersid[Risk.Settings.turnOf] == Risk.Territories[t].color ) {
+                $(".troops_main").filter("#"+Risk.Territories[t].path.attrs.id).animate({
+                    width: 35,
+                    height: 35,
+                    left: (ArmyjqPoints[t].x-7),
+                    top: (ArmyjqPoints[t].y-7)
+                }, 50);
+                $(".troops_main a").filter("#"+Risk.Territories[t].path.attrs.id).animate({
+                    "line-height": "35px"
+                }, 50);
+                for (var i in neighbours) {
+                    console.log(Risk.Territories[t].neighbours);
+                    console.log(neighbours[i]);
+                    if (Risk.Territories[t].color != Risk.Territories[neighbours[i]].color) {
+                        jsPlumb.Defaults.Container = $(".kineticjs-content");
+
+                        jsPlumb.connect({
+                            source: Risk.Territories[t].path.attrs.id,
+                            endpoint: "Blank",
+                            endpointStyle: {fillStyle: "black"},
+                            overlays : [["Arrow", { cssClass:"l1arrow", location:0.89, width:20,length:20 }] ],
+                            target: Risk.Territories[neighbours[i]].path.attrs.id,
+                            anchor: "Center",
+                            paintStyle: { strokeStyle: Risk.Territories[t].color, lineWidth: 3 },
+                            connector: ["Straight", { minStubLength: 40}]
+                        });
+   
+                    }
+                }
+            }
+        }
+        Risk.Settings.connect = false;
+    }
+}
+
 function finishTurn() {
-    alertWindow(" turn <span style='color:green'>started<span>");
+    alertWindow(" turn started");
     $( ".soldiers_num" ).html("+"+Risk.Settings.playerTroops[Risk.Settings.colors[Risk.Settings.players[Risk.Settings.turnOf]]]);
     $( ".soldiers" ).fadeIn( "slow" , 0, function() {});
     $( ".soldiers_num" ).fadeIn( "slow" , 0, function() {});
@@ -325,7 +370,7 @@ function alertWindow(message, background) {
     var currentColor = Risk.Settings.playersid[Risk.Settings.turnOf];
     var currentPlayer = Risk.Settings.players[Risk.Settings.turnOf];
     var currentPlayerName = currentPlayer.charAt(0).toUpperCase()+currentPlayer.slice(1);
-    $(".alert_window p").html("<span class='player' style='color: "+currentColor+"'>"+currentPlayerName+"</span> " + message);
+    $(".alert_window p").html("<span class='player' style='color: white'>"+currentPlayerName+"</span> " + message);
     $( ".alert_window" ).fadeIn( "slow" , 0, function() {});
     $(".next_action").css("background", background);
     setTimeout(function(){ $( ".alert_window" ).fadeOut( "slow" , function() {}); }, 3000);
