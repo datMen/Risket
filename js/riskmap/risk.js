@@ -224,6 +224,9 @@ var Risk = {
         function showsStartmessage() {
             if (Risk.Settings.turnOf === 0) {
                 alertWindow(" turn <span style='color:green'>started<span>",  "url(img/arrow_right_gray.png");
+                $( ".soldiers_num" ).html("+"+Risk.Settings.playerTroops[Risk.Settings.colors[Risk.Settings.players[Risk.Settings.turnOf]]]);
+                $( ".soldiers" ).fadeIn( "slow" , 0, function() {});
+                $( ".soldiers_num" ).fadeIn( "slow" , 0, function() {});
         }
                 
         }
@@ -237,6 +240,9 @@ var Risk = {
         });
         Risk.Territories[id].armyNum.attrs.text = territoryArmy.attrs.text;
         $(".troops_main a").filter("#"+Risk.Territories[id].path.attrs.id).html(troops);
+        $( ".soldiers_num" ).html("+"+(Risk.Settings.playerTroops[Risk.Settings.colors[Risk.Settings.players[Risk.Settings.turnOf]]] - 1));
+        $( ".soldiers" ).fadeIn( "slow" , 0, function() {});
+        $( ".soldiers_num" ).fadeIn( "slow" , 0, function() {});
     },
 
     actions: function(path, t, group) {
@@ -302,11 +308,17 @@ var Risk = {
 $(function() {
     $(".next_action").click(function() {
         if ($(".next_action").css("background").match("_green")[0] == "_green") {
-            alertWindow(" turn <span style='color:green'>started<span>");
-            setTimeout(function(){ $( ".alert_window" ).fadeOut( "slow" , function() {}); }, 3000);
+            finishTurn();
         }
     });
 });
+
+function finishTurn() {
+    alertWindow(" turn <span style='color:green'>started<span>");
+    $( ".soldiers_num" ).html("+"+Risk.Settings.playerTroops[Risk.Settings.colors[Risk.Settings.players[Risk.Settings.turnOf]]]);
+    $( ".soldiers" ).fadeIn( "slow" , 0, function() {});
+    $( ".soldiers_num" ).fadeIn( "slow" , 0, function() {});
+}
 
 function alertWindow(message, background) {
     $( ".alert_window" ).stop();
@@ -321,4 +333,6 @@ function alertWindow(message, background) {
 
 $( document ).ready(function() {
     $(".alert_window").hide();
+    $(".soldiers").hide();
+    $(".soldiers_num").hide();
 });
