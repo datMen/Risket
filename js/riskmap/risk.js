@@ -98,39 +98,7 @@ var Risk = {
 
             var territoryArmy = new Kinetic.Text({
                     text: 0,
-                    fill: '#fff',
-                    fontSize: 15,
-                    fontStyle: 'bold',
-                    fontFamily: 'Arial',
-                    x: ArmyPoints[id].x,
-                    y: ArmyPoints[id].y,
-                    align: 'center',
-                    id: 'troopsNum'
                 });
-
-            var territoryCircleArmy = new Kinetic.Circle({
-                radius: 20,
-                offset: [-2,0],
-                x: ArmyPoints[id].x+6,
-                y: ArmyPoints[id].y+7,
-                opacity: 0.3,
-                stroke: 'black',
-                strokeWidth: 2
-            });
-
-            var territoryCircleArmy2 = new Kinetic.Circle({
-                radius: 15,
-                offset: [-2,0],
-                x: ArmyPoints[id].x+6,
-                y: ArmyPoints[id].y+7,
-                opacity: 0.3,
-                stroke: 'black',
-                strokeWidth: 2
-            });
-
-            var armyCircleGroup = new Kinetic.Group();
-            armyCircleGroup.add(territoryCircleArmy);
-            armyCircleGroup.add(territoryCircleArmy2);
 
             Risk.Territories[id] = {
                 name: TerritoryNames[id],
@@ -138,8 +106,7 @@ var Risk = {
                 nameImg: territoryNameImg,
                 color: null,
                 neighbours: Neighbours[id],
-                armyNum: territoryArmy,
-                armyCircle: armyCircleGroup
+                armyNum: territoryArmy
             };
         }
         
@@ -164,12 +131,10 @@ var Risk = {
             
             var path = Risk.Territories[t].path;
             var nameImg = Risk.Territories[t].nameImg;
-            var armyCircle = Risk.Territories[t].armyCircle;
             var group = new Kinetic.Group();
 
             //We have to set up a group for proper mouseover on territories and sprite name images 
             group.add(path);
-            group.add(armyCircle);
             Risk.mapLayer.add(group);
         
             //Basic animations 
@@ -207,16 +172,12 @@ var Risk = {
                 while (color == newColor) {
                     var newColor = getRandomColor();
                 }
-                var armyCircle = Risk.Territories[id].armyCircle;
-                var armyNum = Risk.Territories[id].armyNum;
                 Risk.Territories[id].color = Risk.Settings.colors['indep'];
 
                 Risk.Territories[id].path.setFill(Risk.Settings.colors['indep']);
                 Risk.Territories[id].path.setOpacity(0.5);
-
-                armyNum.attrs.fill = Risk.Settings.colors['black'];
-                armyCircle.attrs.fill = Risk.Settings.colors['indep'];
-                armyCircle.attrs.stroke = Risk.Settings.colors['black'];
+                $(".troops").filter("#"+Risk.Territories[id].path.attrs.id).css("background", Risk.Territories[id].color);
+                $(".troops_main a").filter("#"+Risk.Territories[id].path.attrs.id).css("color", "black");
             }
         }
 
@@ -241,14 +202,9 @@ var Risk = {
                 var randcol = getRandomColor();
                 var color = Risk.Settings.colors[randcol];
                 var dcolor = Risk.Settings.dcolors[randcol];
-                var armyNum = Risk.Territories[id].armyNum;
-                var armyCircle = Risk.Territories[id].armyCircle;
                 Risk.Territories[id].color = color;
                 Risk.Territories[id].path.setFill(color);
                 Risk.Territories[id].path.setOpacity(0.5);
-
-                armyCircle.attrs.fill = color;
-                armyCircle.attrs.stroke = dcolor;
             }
                 
         }
